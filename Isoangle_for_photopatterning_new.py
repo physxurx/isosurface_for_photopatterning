@@ -299,7 +299,6 @@ def draw_angleplots(arr, filename,
     img = Image.fromarray((src_crop * 255).astype(np.uint8), mode='L')
     img = img.resize(out_size, resample=Image.Resampling.NEAREST)
 
-    # ---- 保存 ----
     img.save(filename, format='PNG')
     print(f"Image saved to {filename}")
 
