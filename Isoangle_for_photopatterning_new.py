@@ -295,11 +295,11 @@ def draw_angleplots(arr, filename,
 # ==== Main program ====
 
 if __name__ == "__main__":
-    q0 = 1                              # Absolute value of the winding number at the grid point
-    n = 3                               # Grid resolution (n+1 points per side)
+    q0 = 3                              # Absolute value of the winding number at the grid point
+    n = 5                               # Grid resolution (n+1 points per side)
     Lx, Ly = 1.0, 1.0                   # Domain size: it is just a number, do not change
     width_r, height_r = 16/25, 9/25     # width and height ratio for the output box, do not change
-    x0, y0 = 0, 0                       # origin for the output box, 0 <= x0 <= Lx*(1-width_r); 0 <= y0 <= Ly*(1- height_r)
+    x0, y0 = 0.1, 0.1                   # origin for the output box, 0 <= x0 <= Lx*(1-width_r); 0 <= y0 <= Ly*(1- height_r)
     box = (x0, y0, width_r, height_r)
     aa = Lx / n                         # lattice constant
     sides = q0 * 2                      # Number of polygon edges (2 for q=1/2)
@@ -359,7 +359,7 @@ if __name__ == "__main__":
     
     theta = np.mod(np.arctan2(V, U), np.pi)
 
-    # Draw multiple angular isosurfaces (blue regions correspond to θ≈θ₀)
+    # Draw multiple angular isosurfaces (white regions correspond to θ≈θ₀)
     num_angles = 10 #(number of intervals in [0, pi], because 0 and pi are the same, so it should plus 1)
     for i in range(num_angles + 1):
         theta_0 = i / num_angles * np.pi
@@ -368,7 +368,7 @@ if __name__ == "__main__":
         delta_theta = np.pi / num_angles
         mask = select_theta_indices(theta, theta_0, delta_theta)
         draw_angleplots(mask, fname3,
-                                 out_size = (1980, 1080),
+                                 out_size = (1920, 1080),
                                  src_box = box
                                  )
 
