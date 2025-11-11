@@ -307,8 +307,8 @@ def draw_angleplots(arr, filename,
 # ==== Main program ====
 
 if __name__ == "__main__":
-    q0 = 1/2                            # Absolute value of the winding number at the grid point
-    n = 8                               # Grid resolution (n+1 points per side)
+    q0 = 2                            # Absolute value of the winding number at the grid point
+    n = 4                               # Grid resolution (n+1 points per side)
     Lx, Ly = 1.0, 1.0                   # Domain size: it is just a number, do not change
     width_r, height_r = 16/25, 9/25     # width and height ratio for the output box, do not change
     x0, y0 = 0.5 - width_r/2, 0.5 - height_r/2                   # origin for the output box, 0 <= x0 <= Lx*(1-width_r); 0 <= y0 <= Ly*(1- height_r)
@@ -335,7 +335,7 @@ if __name__ == "__main__":
     for center, q in zip(grid, q_values):
         verts = generate_polygon_vertices(center, sides, radius, rotation_deg=rotation_deg) #
         red_positions.extend(verts)
-        if q < 1:
+        if np.abs(q) < 1:
             red_charges.extend([q])
         else:
             red_charges.extend([0.5 * q] * len(verts))
