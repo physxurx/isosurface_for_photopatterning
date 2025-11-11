@@ -316,7 +316,7 @@ if __name__ == "__main__":
     aa = Lx / n                         # lattice constant
     sides = int(q0 * 2)                 # Number of polygon edges (2 for q=1/2)
     radius = aa / 10                    # Distance from center to vertex. if q0=1/2, it can be any value that does not affect the final results
-    apert = np.pi/2                     # initial azimuthal angle (rad) for each grid point
+    apert = 0                     # initial azimuthal angle (rad) for each grid point
     rotation_deg = 0                    # rotation angle (degree) for each polygon at grid points
     
     # Generate grid centers and their winding numbers
@@ -335,7 +335,10 @@ if __name__ == "__main__":
     for center, q in zip(grid, q_values):
         verts = generate_polygon_vertices(center, sides, radius, rotation_deg=rotation_deg) #
         red_positions.extend(verts)
-        red_charges.extend([0.5 * q] * len(verts))
+        if q < 1:
+            red_charges.extend([q])
+        else:
+            red_charges.extend([0.5 * q] * len(verts))
         all_vertices.append(verts)
 
     red_positions = np.array(red_positions)
