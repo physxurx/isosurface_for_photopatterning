@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
+Updated on Tue Nov 11 14:59:31 2025
+
+@author: Rongxing Xu
+
+add a new function that allows q0 = 1/2.
+"""
+
+"""
 Created on Fri Nov  7 16:14:17 2025
 
 Copyright © Rongxing Xu, 2025. All rights reserved.
@@ -64,10 +72,14 @@ def generate_polygon_vertices(center, sides, radius,
     - radius: distance from center to vertex
     - rotation_deg: optional rotation in degrees
     """
-    angles = np.linspace(0, 2 * np.pi, sides, endpoint=False)
-    angles += np.deg2rad(rotation_deg)
-    x = center[0] + radius * np.cos(angles)
-    y = center[1] + radius * np.sin(angles)
+    if sides > 1:
+        angles = np.linspace(0, 2 * np.pi, sides, endpoint=False)
+        angles += np.deg2rad(rotation_deg)
+        x = center[0] + radius * np.cos(angles)
+        y = center[1] + radius * np.sin(angles)
+    else:
+        x = [center[0]]
+        y = [center[1]]
     return np.stack([x, y], axis=-1)
 
 
@@ -295,17 +307,17 @@ def draw_angleplots(arr, filename,
 # ==== Main program ====
 
 if __name__ == "__main__":
-    q0 = 3                              # Absolute value of the winding number at the grid point
-    n = 5                               # Grid resolution (n+1 points per side)
+    q0 = 1/2                            # Absolute value of the winding number at the grid point
+    n = 8                               # Grid resolution (n+1 points per side)
     Lx, Ly = 1.0, 1.0                   # Domain size: it is just a number, do not change
     width_r, height_r = 16/25, 9/25     # width and height ratio for the output box, do not change
-    x0, y0 = 0.1, 0.1                   # origin for the output box, 0 <= x0 <= Lx*(1-width_r); 0 <= y0 <= Ly*(1- height_r)
+    x0, y0 = 0.5 - width_r/2, 0.5 - height_r/2                   # origin for the output box, 0 <= x0 <= Lx*(1-width_r); 0 <= y0 <= Ly*(1- height_r)
     box = (x0, y0, width_r, height_r)
     aa = Lx / n                         # lattice constant
-    sides = q0 * 2                      # Number of polygon edges (2 for q=1/2)
-    radius = aa / 5                     # Distance from center to vertex
-    apert = 0                           # initial azimuthal angle (rad) for each grid point
-    rotation_deg = 45                   # rotation angle (degree) for each polygon at grid points
+    sides = int(q0 * 2)                 # Number of polygon edges (2 for q=1/2)
+    radius = aa / 10                    # Distance from center to vertex. if q0=1/2, it can be any value that does not affect the final results
+    apert = np.pi/2                     # initial azimuthal angle (rad) for each grid point
+    rotation_deg = 0                    # rotation angle (degree) for each polygon at grid points
     
     # Generate grid centers and their winding numbers
     grid = generate_internal_grid_points(n, Lx, Ly)
@@ -313,7 +325,7 @@ if __name__ == "__main__":
     
     
     # === create the saving folder ===
-    output_dir = os.path.join(os.getcwd(), f"output_images_q={q0:d}")
+    output_dir = os.path.join(os.getcwd(), f"output_images_q={q0:.1f}")
     os.makedirs(output_dir, exist_ok=True)
     
     # Construct polygons and assign charges
@@ -330,7 +342,7 @@ if __name__ == "__main__":
     red_charges = np.array(red_charges)
 
     # Plot grid and vortex positions
-    fname1 = os.path.join(output_dir, f'grid_q={q0:d}.png')
+    fname1 = os.path.join(output_dir, f'grid_q={q0:.1f}.png')
     plot_grid_and_vertices(grid, all_vertices, red_charges, Lx, Ly, fname1, box=box)
 
     # Compute director field
@@ -348,7 +360,7 @@ if __name__ == "__main__":
             U[i, j], V[i, j] = vortex_field(X[i, j], Y[i, j], red_positions, red_charges)
     
     # Plot grid and vortex positions, and vector field
-    fname2 = os.path.join(output_dir, f'grid_and_vectors_q={q0:d}.png')
+    fname2 = os.path.join(output_dir, f'grid_and_vectors_q={q0:.1f}.png')
     plot_grid_vertices_and_vectors(
                                     grid, all_vertices, red_charges,
                                     Lx, Ly, box = box,
@@ -364,7 +376,7 @@ if __name__ == "__main__":
     for i in range(num_angles + 1):
         theta_0 = i / num_angles * np.pi
         theta_0deg = np.rad2deg(theta_0)
-        fname3 = os.path.join(output_dir, f'Isoangles_q={q0:d}_phi={theta_0deg:.3f}.png')
+        fname3 = os.path.join(output_dir, f'Isoangles_q={q0:.1f}_phi={theta_0deg:.3f}.png')
         delta_theta = np.pi / num_angles
         mask = select_theta_indices(theta, theta_0, delta_theta)
         draw_angleplots(mask, fname3,
