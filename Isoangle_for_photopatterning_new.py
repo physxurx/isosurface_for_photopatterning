@@ -13,7 +13,7 @@ Created on Fri Nov  7 16:14:17 2025
 
 Copyright © Rongxing Xu, 2025. All rights reserved.
 - This program is the intellectual property of the author and may not be used,
-  copied, modified, or distributed in any form without prior written permission ¥
+  copied, modified, or distributed in any form without prior written permission
   from the author. 
 - Any use of this software is strictly subject to explicit authorization.
   Unauthorized use is strictly prohibited.
@@ -307,7 +307,7 @@ def draw_angleplots(arr, filename,
 # ==== Main program ====
 
 if __name__ == "__main__":
-    q0 = 2                            # Absolute value of the winding number at the grid point
+    q0 = 3                            # Absolute value of the winding number at the grid point
     n = 4                               # Grid resolution (n+1 points per side)
     Lx, Ly = 1.0, 1.0                   # Domain size: it is just a number, do not change
     width_r, height_r = 16/25, 9/25     # width and height ratio for the output box, do not change
@@ -316,7 +316,7 @@ if __name__ == "__main__":
     aa = Lx / n                         # lattice constant
     sides = int(q0 * 2)                 # Number of polygon edges (2 for q=1/2)
     radius = aa / 10                    # Distance from center to vertex. if q0=1/2, it can be any value that does not affect the final results
-    apert = 0                     # initial azimuthal angle (rad) for each grid point
+    apert = 0                           # initial azimuthal angle (rad) for each grid point
     rotation_deg = 0                    # rotation angle (degree) for each polygon at grid points
     
     # Generate grid centers and their winding numbers
@@ -338,7 +338,7 @@ if __name__ == "__main__":
         if np.abs(q) < 1:
             red_charges.extend([q])
         else:
-            red_charges.extend([0.5 * q] * len(verts))
+            red_charges.extend([q/sides] * len(verts))
         all_vertices.append(verts)
 
     red_positions = np.array(red_positions)
