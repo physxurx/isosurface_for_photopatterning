@@ -248,7 +248,7 @@ def select_theta_indices(theta, theta_0, delta_theta):
 
 
 def draw_angleplots(arr, filename,
-                         out_size=(1980, 1080),
+                         out_size=(1920, 1080),
                          src_box=(0,0,16/25,9/25)   # (x0, y0, w, h)
                          ):
     """
@@ -262,7 +262,7 @@ def draw_angleplots(arr, filename,
     filename : str
         Path where the PNG will be saved.
     out_size : tuple
-        (width_px, height_px) of the output image in pixels. Default (1980, 1080).
+        (width_px, height_px) of the output image in pixels. Default (1920, 1080).
     src_box : None or tuple
         If None: use whole array. Otherwise (x0, y0, w, h). Coordinates can be ints
         (pixel coords in array) or floats in (0,1) interpreted as normalized fractions.
