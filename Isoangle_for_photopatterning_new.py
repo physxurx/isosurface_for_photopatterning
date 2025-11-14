@@ -380,7 +380,7 @@ if __name__ == "__main__":
     theta = np.mod(np.arctan2(V, U), np.pi)
 
     # Draw multiple angular isosurfaces (white regions correspond to θ≈θ₀)
-    num_angles = 10 #(number of intervals in [0, pi]. 0 and pi are the same)
+    num_angles = 10 #(number of intervals in [0, pi). 0 and pi are the same)
     for i in range(num_angles):
         theta_0 = i / num_angles * np.pi
         theta_0deg = np.rad2deg(theta_0)
