@@ -238,13 +238,19 @@ def plot_grid_vertices_and_vectors(grid_points, all_vertices, red_charges,
 
 
 
-def select_theta_indices(theta, theta_0, delta_theta):
+def select_theta_indices(theta, theta_0, delta_theta, i):
     """
     Select grid points where the local angle θ
     lies within ±(Δθ/2) of θ₀, considering π-periodicity.
     """
     delta = theta - theta_0
-    return np.abs(delta) <= delta_theta / 2
+    Mask = np.abs(delta) <= delta_theta / 2
+    if i>0:
+        return Mask
+    else:
+        delta2 = theta - (np.pi - theta_0)
+        Mask2 = Mask | (np.abs(delta2) <= (delta_theta) / 2)
+        return Mask2
 
 
 def draw_angleplots(arr, filename,
@@ -374,13 +380,13 @@ if __name__ == "__main__":
     theta = np.mod(np.arctan2(V, U), np.pi)
 
     # Draw multiple angular isosurfaces (white regions correspond to θ≈θ₀)
-    num_angles = 10 #(number of intervals in [0, pi], because 0 and pi are the same, so it should plus 1)
-    for i in range(num_angles + 1):
+    num_angles = 10 #(number of intervals in [0, pi]. 0 and pi are the same)
+    for i in range(num_angles):
         theta_0 = i / num_angles * np.pi
         theta_0deg = np.rad2deg(theta_0)
         fname3 = os.path.join(output_dir, f'Isoangles_q={q0:.1f}_phi={theta_0deg:.3f}.png')
         delta_theta = np.pi / num_angles
-        mask = select_theta_indices(theta, theta_0, delta_theta)
+        mask = select_theta_indices(theta, theta_0, delta_theta, i)
         draw_angleplots(mask, fname3,
                                  out_size = (1920, 1080),
                                  src_box = box
